@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, action, computed,  } from 'mobx';
 
 export default class Store {
 
@@ -9,14 +9,29 @@ export default class Store {
     clicks: number = 0;
 
     constructor() {
-        setInterval(() => { this.timer += 1; }, 1000);
+        setInterval(() => this.tick(), 1000);
     }
 
+    @action.bound
+    tick() {
+        this.timer += 1;
+    }
+
+    @action
     resetTimer() {
         this.timer = 0;
     }
 
+    @action
     click() {
         this.clicks += 1;
+    }
+
+    @computed
+    get summary() {
+        return {
+            clicks: this.clicks,
+            timer: this.timer
+        };
     }
 }

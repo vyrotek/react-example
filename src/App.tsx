@@ -12,7 +12,9 @@ export default class App extends React.Component<{}, {}> {
       <div className="App">
         <div className="App-header">
           <h2>
-            <Link to={'/timer'}>Timer</Link> or <Link to={'/clicks'}>Clicks</Link>
+            <Link to={'/'}>Home</Link>&nbsp;
+            <Link to={'/timer'}>Timer</Link>&nbsp;
+            <Link to={'/clicks'}>Clicks</Link>
           </h2>
         </div>
         <div className="App-content">
