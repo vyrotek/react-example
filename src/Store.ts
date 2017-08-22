@@ -1,4 +1,5 @@
-import { observable, action, computed,  } from 'mobx';
+import { observable, action, computed, runInAction } from 'mobx';
+import axios from 'axios';
 
 export default class Store {
 
@@ -7,6 +8,9 @@ export default class Store {
 
     @observable
     clicks: number = 0;
+
+    @observable
+    pokemon: Pokemon;
 
     constructor() {
         setInterval(() => this.tick(), 1000);
@@ -34,4 +38,25 @@ export default class Store {
             timer: this.timer
         };
     }
+
+    @action
+    async catchPokemon(id: number) {
+
+        try {
+
+            let pokeResponse = await axios.get(`http://pokeapi.co/api/v2/pokemon/${id}`);
+            let pokeData = pokeResponse.data as Pokemon;
+
+            runInAction(() => {
+                this.pokemon = pokeData;
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+interface Pokemon {
+    name: string;
 }
