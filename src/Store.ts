@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import axios from 'axios';
 
 export default class Store {
@@ -47,13 +47,18 @@ export default class Store {
             let pokeResponse = await axios.get(`http://pokeapi.co/api/v2/pokemon/${id}`);
             let pokeData = pokeResponse.data as Pokemon;
 
-            runInAction(() => {
-                this.pokemon = pokeData;
-            });
+            // To update the store we must always be in scope of an 'action'
+            // We lost our action scope with the async/await so we'll call a new action
+            // This can be done with with runInAction(()=>{ }) too        
+            this.setPokemon(pokeData);
 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    @action setPokemon(pokemon: Pokemon) {
+        this.pokemon = pokemon;
     }
 }
 
